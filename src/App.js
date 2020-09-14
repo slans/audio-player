@@ -1,95 +1,58 @@
 import React, { Component } from 'react';
+import './styles.css';
 
-const fahrenheitToCelsius = temperature => {
-  return (temperature - 32) / 1.8;
-}
-const celsiusToFahrenheit = temperature => {
-  return (temperature * 1.8) + 32;
+const FancyBorder = props => {
+  return (
+    <div className={`FancyBorder FancyBorder-${props.color}`}>
+      {props.children}
+    </div>
+  )
 }
 
-const convertTemp = (temperature, convertFunc) => {
-  if (Number.isNaN(temperature)) {
-    return '';
-  }
-  return Math.round(convertFunc(temperature));
+const Dialog = props => {
+  return (
+    <FancyBorder color='blue'>
+      <h1 className='Dialog-title'>
+        {props.title}
+      </h1>
+      <p className='Dialog-message'>
+        {props.message}
+      </p>
+      {props.children}
+    </FancyBorder>
+  )
 }
 
 class App extends Component {
-  render() {
-    return (
-      <Calculator />
-    )
-  }
-}
-
-class Calculator extends Component {
   state = {
-    temperature: 0,
-    scale: 'c'
+    login: ''
   }
 
-  handleCelsiusChange = temperature => {
+  handleChange = (e) => {
+    const value = e.target.value;
     this.setState({
-      temperature,
-      scale: 'c'
+      login: value
     })
   }
 
-  handleFarenheitChange = temperature => {
-    this.setState({
-      temperature,
-      scale: 'f'
-    })
+  handleSubmit = () => {
+    alert(`Welcome on board, ${this.state.login}`)
   }
 
   render() {
-    const { scale, temperature } = this.state;
-    const celsiusTemp = scale === 'c' ? temperature : convertTemp(temperature, fahrenheitToCelsius);
-    const fahrenheitTemp = scale === 'f' ? temperature : convertTemp(temperature, celsiusToFahrenheit);
-
+    const {login} = this.state;
     return (
-      <>
-        <TemperatureInput
-          scale='c'
-          temperature={celsiusTemp}
-          handleChange={this.handleCelsiusChange} />
-        <TemperatureInput
-          scale='f'
-          temperature={fahrenheitTemp}
-          handleChange={this.handleFarenheitChange} />
-        <BoilingVerdict temperature={celsiusTemp} />
-      </>
+      <Dialog title='Mars Exploration Program'
+              message='How should we refer to you?'>
+        <input type='text'
+               value={login} 
+               onChange={this.handleChange}/>
+        <button onClick={this.handleSubmit}>
+          Sign me up
+        </button>
+      </Dialog>
     )
   }
-}
-
-const TemperatureInput = props => {
-  const scaleNames = {
-    'c': 'Celsius',
-    'f': 'Fahrenheit'
-  }
-
-  const handleChange = e => {
-    const value = e.target.value;
-    if (isNaN(value)) return;
-    props.handleChange(value);
-  }
-
-  return (
-    <fieldset>
-      <legend>Введите градусы по шкале {scaleNames[props.scale]}:</legend>
-      <input value={props.temperature}
-        onChange={handleChange} />
-    </fieldset>
-  )
-}
-
-const BoilingVerdict = props => {
-  return (
-    props.temperature > 100
-      ? <p>The water is boiling!</p>
-      : <p>The water would not boil</p>
-  )
 }
 
 export default App;
