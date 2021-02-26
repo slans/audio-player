@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 const chillHop = () => [
 	{
 		id: nanoid(),
@@ -6,7 +8,7 @@ const chillHop = () => [
 		artist: 'Aarigod',
 		audio: 'https://mp3.chillhop.com/serve.php/?mp3=12997',
 		color: ['#6C8D45', '#2C2A1D'],
-		active: false,
+		active: true,
 	},
 	{
 		id: nanoid(),
